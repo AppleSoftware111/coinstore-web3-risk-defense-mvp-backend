@@ -1,0 +1,2 @@
+export const DEFAULT_RPC_TIMEOUT_MS = 8_000;
+export const SIMULATION_BUDGET_MS = 25_000;

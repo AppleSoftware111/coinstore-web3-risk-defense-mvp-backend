@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Coinstore MVP Demo</title>
+    <style>
+      body { font-family: Arial, sans-serif; margin: 24px; background: #111; color: #eee; }
+      .row { margin: 8px 0; }
+      button { margin-right: 8px; padding: 8px 12px; cursor: pointer; }
+      pre { padding: 12px; background: #1d1d1d; border: 1px solid #333; border-radius: 8px; overflow: auto; }
+      .banner { font-size: 22px; font-weight: bold; margin: 12px 0; color: #7dff7d; }
+    </style>
+  </head>
+  <body>
+    <h1>Coinstore Web3 Wallet MVP</h1>
+    <div class="row">Real-time prevention with conditional AI and risk policy thresholds.</div>
+    <div class="row">
+      <button onclick="runDemo('malicious')">Run Malicious Scenario</button>
+      <button onclick="runDemo('suspicious')">Run Suspicious Scenario</button>
+      <button onclick="runDemo('safe')">Run Safe Scenario</button>
+    </div>
+    <div id="banner" class="banner">Waiting for scenario...</div>
+    <pre id="out">No data yet.</pre>
+    <script>
+      const out = document.getElementById("out");
+      const banner = document.getElementById("banner");
+      const ws = new WebSocket(`ws://${location.host}/ws`);
+      ws.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        if (data.banner) banner.textContent = data.banner;
+        out.textContent = JSON.stringify(data, null, 2);
+      };
+      async function runDemo(name) {
+        const res = await fetch(`/api/demo/${name}`, { method: "POST" });
+        const data = await res.json();
+        banner.textContent = `SCAM ${data.decision.action === "BLOCK" ? "BLOCKED" : data.decision.action} in ${Math.round(data.decision.elapsedMs)}ms`;
+        out.textContent = JSON.stringify(data, null, 2);
+      }
+    </script>
+  </body>
+  </html>
