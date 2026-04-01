@@ -24,7 +24,13 @@ app.use(
       callback(null, false);
     },
     methods: ["GET", "POST", "PUT", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization", "x-wallet-id", "x-api-key"],
+    allowedHeaders: [
+      "Content-Type",
+      "Authorization",
+      "x-wallet-id",
+      "x-api-key",
+      "ngrok-skip-browser-warning",
+    ],
   }),
 );
 app.use(express.json({ limit: "32kb" }));
